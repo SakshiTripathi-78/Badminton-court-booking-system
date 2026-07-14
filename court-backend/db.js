@@ -1,3 +1,4 @@
+// Lets understand and make everything from the scratch
 import pg from 'pg';
 import dotenv from 'dotenv';
 
