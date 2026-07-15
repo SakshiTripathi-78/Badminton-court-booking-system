@@ -30,5 +30,5 @@ export default {
 /*
 By wrapping the pool in this exported object, you create a singleton pattern for your database connection.
  You can import this file throughout your project, and every part of your app will share the same pool instance, 
- ensuring you do not exceed your database's connection limit.
+ ensuring you do not exceed your database's connection limit!
 */
