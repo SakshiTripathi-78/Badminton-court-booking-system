@@ -1,4 +1,4 @@
-import db from './db.js';
+import db from './src/config/db.js';
 
 async function updateDatabase() {
     try {
