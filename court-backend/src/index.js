@@ -48,116 +48,12 @@ app.use('/venues',venueRoutes);
 
 
 // 5. Book a Court
-app.post('/bookings', async (req, res) => {
-    try {
-        const { user_id, court_id, start_time, end_time } = req.body;
+app.use('/bookacourt',bookingRoutes);
+   
 
-        const requestedStartTime = new Date(start_time);
-        const now = new Date();
+// 6. Create a Matchmaking Profile (The power of NoSQL!) and Get All Matchmaking Profiles (The power of NoSQL!) and GET MATCHMAKING PROFILES (The "Stitch" Route)
+app.use('/matchmaking',matchRoutes);
 
-        if (requestedStartTime < now) {
-            return res.status(400).json({ error: "You cannot book a court in the past!" });
-        }
-
-        // Step 1: Prevent Double-Booking
-        const checkQuery = `
-            SELECT id FROM bookings 
-            WHERE court_id = $1 
-            AND status = 'confirmed'
-            AND (start_time < $3 AND end_time > $2)
-        `;
-        const overlapResult = await db.query(checkQuery, [court_id, start_time, end_time]);
-
-        if (overlapResult.rows.length > 0) {
-            return res.status(409).json({ error: 'Sorry! This court is already booked for this time slot.' });
-        }
-
-        // Step 2: Insert the new booking
-        const insertQuery = `
-            INSERT INTO bookings (user_id, court_id, start_time, end_time)
-            VALUES ($1, $2, $3, $4)
-            RETURNING *;
-        `;
-        const result = await db.query(insertQuery, [user_id, court_id, start_time, end_time]);
-
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 6. Create a Matchmaking Profile (The power of NoSQL!)
-app.post('/matchmaking-profiles', async (req, res) => {
-    try {
-        // In NoSQL, we don't have to extract specific fields. 
-        // We just grab the entire raw object the user sends us!
-        const profileData = req.body;
-
-        // We select the 'profiles' collection (MongoDB's version of a table).
-        // If it doesn't exist, MongoDB magically creates it on the fly!
-        const collection = nosqlDb.collection('profiles');
-        
-        // Insert the dynamic document
-        const result = await collection.insertOne(profileData);
-
-        res.status(201).json({
-            message: "Matchmaking profile created!",
-            documentId: result.insertedId,
-            profile: profileData
-        });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 7. Get All Matchmaking Profiles (The power of NoSQL!)
-app.get('/matchmaking-profiles', async (req, res) => {
-    try {
-        const collection = nosqlDb.collection('profiles');
-        
-        // .find({}) tells MongoDB to get every document in the collection
-        // .toArray() turns those documents into a readable JSON array
-        const profiles = await collection.find({}).toArray();
-        
-        res.status(200).json(profiles);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// --- GET MATCHMAKING PROFILES (The "Stitch" Route) ---
-app.get('/profiles', async (req, res) => {
-    try {
-        // 1. FIXED: Using your actual mongoClient and database name!
-        const database = mongoClient.db('matchmaking_db'); 
-        
-        // Note: Change 'profiles' if you named your collection something else earlier!
-        const collection = database.collection('profiles'); 
-        const profiles = await collection.find({}).toArray();
-
-        // 2. Fetch the strict user data (id and name) from PostgreSQL
-        const usersQuery = await db.query('SELECT id, name FROM users');
-        const users = usersQuery.rows;
-
-        // 3. The Stitch: Combine NoSQL profiles with SQL names
-        const stitchedProfiles = profiles.map(profile => {
-            // Find the SQL user whose ID matches the MongoDB profile's user_id
-            const matchingUser = users.find(u => u.id === profile.user_id);
-            
-            return {
-                ...profile, 
-                name: matchingUser ? matchingUser.name : "Unknown Player" 
-            };
-        });
-
-        // 4. Send the combined data back to React
-        res.status(200).json(stitchedProfiles);
-
-    } catch (err) {
-        console.error("Error fetching profiles:", err);
-        res.status(500).json({ error: 'Failed to fetch matchmaking profiles' });
-    }
-});
 
 // --- CREATE A NEW MATCH CHALLENGE ---
 app.post('/challenge', async (req, res) => {
