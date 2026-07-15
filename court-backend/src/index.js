@@ -43,23 +43,9 @@ app.post('/users', async (req, res) => {
     }
 });
 
-// 2. Create a new venue and Add a court to a venue
+// 2. Create a new venue and Add a court to a venue and Get all venues WITH their courts
 app.use('/venues',venueRoutes);
 
-// 4. Get all venues WITH their courts
-app.get('/venues', async (req, res) => {
-    try {
-        const query = `
-            SELECT venues.name AS venue_name, venues.address, courts.court_number 
-            FROM venues
-            LEFT JOIN courts ON venues.id = courts.venue_id;
-        `;
-        const result = await db.query(query);
-        res.json(result.rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 // 5. Book a Court
 app.post('/bookings', async (req, res) => {

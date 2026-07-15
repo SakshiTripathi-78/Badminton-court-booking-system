@@ -28,3 +28,17 @@ export const addcourt = async(req,res)=>{
             res.status(500).json({ error: err.message });
         }
 }
+
+export const  venueswithcourt= async(req,res)=>{
+    try {
+            const query = `
+                SELECT venues.name AS venue_name, venues.address, courts.court_number 
+                FROM venues
+                LEFT JOIN courts ON venues.id = courts.venue_id;
+            `;
+            const result = await db.query(query);
+            res.json(result.rows);
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+}

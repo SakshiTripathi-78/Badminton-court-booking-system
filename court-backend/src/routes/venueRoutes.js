@@ -5,5 +5,6 @@ const router=express.Router();
 
 router.post('/venues',venues);
 router.post('/addcourt',addcourt);
+router.get('venueswithcourt',venueswithcourt);
 
 export default router;
