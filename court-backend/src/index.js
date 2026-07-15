@@ -43,22 +43,8 @@ app.post('/users', async (req, res) => {
     }
 });
 
-// 2. Create a new venue
+// 2. Create a new venue and Add a court to a venue
 app.use('/venues',venueRoutes);
-
-// 3. Add a court to a venue
-app.post('/courts', async (req, res) => {
-    try {
-        const { venue_id, court_number } = req.body;
-        const result = await db.query(
-            'INSERT INTO courts (venue_id, court_number) VALUES ($1, $2) RETURNING *',
-            [venue_id, court_number]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 // 4. Get all venues WITH their courts
 app.get('/venues', async (req, res) => {
