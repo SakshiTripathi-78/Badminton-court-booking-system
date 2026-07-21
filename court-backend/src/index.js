@@ -10,6 +10,7 @@ app.use(cors()); // 2. Tell Express to allow outside requests
 app.use(express.json()); // Allows our API to read JSON data
 
 // --- Secure User Registration and Login ---
+//jab bhi koi bhi url auth se start hoga tab ye route yaha jayega!
 app.use('/auth',authRoutes);
 
 
@@ -55,33 +56,8 @@ app.use('/bookacourt',bookingRoutes);
 app.use('/matchmaking',matchRoutes);
 
 
-// --- CREATE A NEW MATCH CHALLENGE ---
-app.post('/challenge', async (req, res) => {
-    try {
-        // We are now extracting the date and time from the request!
-        const { challenger_id, opponent_id, match_date, match_time } = req.body;
-
-        // Ensure the user actually picked a time before sending the challenge
-        if (!match_date || !match_time) {
-            return res.status(400).json({ error: 'Please select a date and time.' });
-        }
-
-        // We added $3 and $4 to safely inject the new date and time
-        const newChallenge = await db.query(
-            `INSERT INTO match_challenges (challenger_id, opponent_id, match_date, match_time) 
-             VALUES ($1, $2, $3, $4) RETURNING *`,
-            [challenger_id, opponent_id, match_date, match_time]
-        );
-
-        res.status(201).json({ 
-            message: "Challenge sent successfully!", 
-            challenge: newChallenge.rows[0] 
-        });
-    } catch (err) {
-        console.error("Error creating challenge:", err);
-        res.status(500).json({ error: 'Failed to send challenge' });
-    }
-});
+// --- CREATE A NEW MATCH CHALLENGE and GET PENDING CHALLENGES FOR A USER---
+app.use('/challenges',challenges);
 
 // --- CREATE OR UPDATE USER PROFILE (MongoDB) ---
 app.post('/profile', async (req, res) => {
@@ -113,27 +89,6 @@ app.post('/profile', async (req, res) => {
     } catch (err) {
         console.error("Error saving profile:", err);
         res.status(500).json({ error: 'Failed to save profile' });
-    }
-});
-
-// --- GET PENDING CHALLENGES FOR A USER ---
-app.get('/challenges/pending/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        
-        // We use a SQL JOIN to get the name of the person who challenged them!
-        const pendingChallenges = await db.query(
-            `SELECT c.id, c.status, c.created_at, u.name AS challenger_name 
-             FROM match_challenges c
-             JOIN users u ON c.challenger_id = u.id
-             WHERE c.opponent_id = $1 AND c.status = 'pending'`,
-            [userId]
-        );
-
-        res.status(200).json(pendingChallenges.rows);
-    } catch (err) {
-        console.error("Error fetching challenges:", err);
-        res.status(500).json({ error: 'Failed to fetch pending challenges' });
     }
 });
 

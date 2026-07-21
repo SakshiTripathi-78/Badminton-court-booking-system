@@ -1,5 +1,7 @@
 import express from 'express'
 import {matchmakingprofile} from '../controllers/matchController.js';
+import {getallmatches} from '../controllers/matchController.js';
+import {matchingprofiles} from '../controllers/matchController.js';
 
 const router = express.Router();
 
