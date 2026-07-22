@@ -1,27 +1,27 @@
 # 🏸 Badminton Court Booking & Matchmaking System
 
-A full-stack application for managing badminton court bookings, player matchmaking, and game challenges[cite: 1]. The system uses a **polyglot persistence** backend architecture, leveraging **PostgreSQL** for relational data (users, courts, schedule bookings, and match challenges) and **MongoDB** for flexible, dynamic player skill profiles[cite: 1].
+A full-stack application for managing badminton court bookings, player matchmaking, and game challenges. The system uses a **polyglot persistence** backend architecture, leveraging **PostgreSQL** for relational data (users, courts, schedule bookings, and match challenges) and **MongoDB** for flexible, dynamic player skill profiles.
 
 ---
 
 ## 🌟 Key Features
 
-* 🔐 **Authentication & Security:** User registration and login using `bcrypt` for secure password hashing[cite: 1].
-* 🏟️ **Venue & Court Management:** Register venues and map multiple courts per venue[cite: 1].
-* 📅 **Smart Booking System:** Real-time scheduling with built-in time-overlap prevention[cite: 1].
-* 🤝 **NoSQL Player Matchmaking:** Dynamic player profiles (play style, skill level, preferred hand, favorite brands) stored in MongoDB[cite: 1].
-* ⚔️ **Match Challenges & Payments:** Send, accept, and complete mock payments for player-vs-player match challenges[cite: 1].
-* 🧵 **Data Stitching Engine:** Merges relational PostgreSQL user details with NoSQL MongoDB profiles into unified API responses[cite: 1].
+* 🔐 **Authentication & Security:** User registration and login using `bcrypt` for secure password hashing.
+* 🏟️ **Venue & Court Management:** Register venues and map multiple courts per venue.
+* 📅 **Smart Booking System:** Real-time scheduling with built-in time-overlap prevention.
+* 🤝 **NoSQL Player Matchmaking:** Dynamic player profiles (play style, skill level, preferred hand, favorite brands) stored in MongoDB.
+* ⚔️ **Match Challenges & Payments:** Send, accept, and complete mock payments for player-vs-player match challenges.
+* 🧵 **Data Stitching Engine:** Merges relational PostgreSQL user details with NoSQL MongoDB profiles into unified API responses.
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### **Backend**
-* **Runtime:** Node.js[cite: 1]
-* **Framework:** Express.js (v5.x)[cite: 1]
-* **Databases:** PostgreSQL (`pg`), MongoDB (`mongodb`)[cite: 1]
-* **Security & Utilities:** `bcrypt`, `cors`, `dotenv`[cite: 1]
+* **Runtime:** Node.js
+* **Framework:** Express.js (v5.x)
+* **Databases:** PostgreSQL (`pg`), MongoDB (`mongodb`)
+* **Security & Utilities:** `bcrypt`, `cors`, `dotenv`
 
 ### **Frontend**
 * **Framework:** React + Vite
@@ -102,7 +102,7 @@ npm install
 ```
 
 ### 2. Initialize Database Tables
-Run the setup script to generate the PostgreSQL tables (`users`, `venues`, `courts`, `bookings`, etc.)[cite: 1]:
+Run the setup script to generate the PostgreSQL tables (`users`, `venues`, `courts`, `bookings`, etc.):
 ```bash
 node setup-tables.js
 ```
@@ -116,7 +116,7 @@ node setup-tables.js
 ```bash
 node src/index.js
 ```
-The server will start at `http://localhost:3000`[cite: 1].
+The server will start at `http://localhost:3000`
 
 ---
 
@@ -125,35 +125,35 @@ The server will start at `http://localhost:3000`[cite: 1].
 ### 🔑 Authentication (`/auth`)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/auth/register` | Register a new user (hashes password with bcrypt)[cite: 1] |
-| `POST` | `/auth/login` | Authenticate user & return user payload[cite: 1] |
+| `POST` | `/auth/register` | Register a new user (hashes password with bcrypt) |
+| `POST` | `/auth/login` | Authenticate user & return user payload |
 
 ### 🏟️ Venues & Courts (`/venues`)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/venues/venues` | Create a new venue[cite: 1] |
-| `POST` | `/venues/addcourt` | Add a court to an existing venue[cite: 1] |
-| `GET` | `/venues/venueswithcourt` | Fetch all venues along with their associated courts[cite: 1] |
+| `POST` | `/venues/venues` | Create a new venue |
+| `POST` | `/venues/addcourt` | Add a court to an existing venue |
+| `GET` | `/venues/venueswithcourt` | Fetch all venues along with their associated courts |
 
 ### 📅 Bookings (`/bookacourt` & Direct Routes)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/bookacourt/bookacourt` | Book a court (includes time-overlap protection)[cite: 1] |
-| `POST` | `/book-court` | Book a solo court session[cite: 1] |
-| `GET` | `/my-bookings/:userId` | Get solo bookings for a specific user[cite: 1] |
+| `POST` | `/bookacourt/bookacourt` | Book a court (includes time-overlap protection)|
+| `POST` | `/book-court` | Book a solo court session |
+| `GET` | `/my-bookings/:userId` | Get solo bookings for a specific user |
 
 ### 🤝 Profile & Matchmaking (MongoDB / Polyglot)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/profile` | Create/update player preferences (upserts to MongoDB)[cite: 1] |
-| `POST` | `/matchmaking/matchmakingprofile` | Save dynamic matchmaking profile document[cite: 1] |
-| `GET` | `/matchmaking/matchingprofiles` | **Stitching Route:** Combines MongoDB profiles with PostgreSQL user names[cite: 1] |
+| `POST` | `/profile` | Create/update player preferences (upserts to MongoDB)|
+| `POST` | `/matchmaking/matchmakingprofile` | Save dynamic matchmaking profile document |
+| `GET` | `/matchmaking/matchingprofiles` | **Stitching Route:** Combines MongoDB profiles with PostgreSQL user names |
 
 ### ⚔️ Challenges & Payments (`/challenges` & Direct Routes)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/challenges/newmatchchallenge` | Create and issue a match challenge[cite: 1] |
-| `GET` | `/challenges/pending/:userId` | Fetch pending match invites for a user[cite: 1] |
-| `PUT` | `/challenge/:id/accept` | Accept a challenge invite[cite: 1] |
-| `PUT` | `/challenge/:id/pay` | Mock payment processing to reserve court[cite: 1] |
-| `GET` | `/matches/:userId` | Fetch accepted and paid matches for a user[cite: 1] |
+| `POST` | `/challenges/newmatchchallenge` | Create and issue a match challenge|
+| `GET` | `/challenges/pending/:userId` | Fetch pending match invites for a user |
+| `PUT` | `/challenge/:id/accept` | Accept a challenge invite |
+| `PUT` | `/challenge/:id/pay` | Mock payment processing to reserve court |
+| `GET` | `/matches/:userId` | Fetch accepted and paid matches for a user|
