@@ -14,6 +14,11 @@ dotenv.config();
 const { Pool } = pg;
 
 //This creates a new instance of the connection pool. 
+/*what is a connection pool? => 
+A connection pool is a collection of already-open database connections
+that an application reuses instead of creating a new connection for every request.
+*/
+//a collection of reusable resources.
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,

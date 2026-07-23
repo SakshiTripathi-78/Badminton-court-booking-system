@@ -40,7 +40,7 @@ export const pendingchallenges = async(req,res)=>{
                  WHERE c.opponent_id = $1 AND c.status = 'pending'`,
                 [userId]
             );
-    
+            //status code!
             res.status(200).json(pendingChallenges.rows);
         } catch (err) {
             console.error("Error fetching challenges:", err);
