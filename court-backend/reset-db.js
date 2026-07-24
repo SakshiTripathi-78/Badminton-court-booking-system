@@ -13,7 +13,7 @@ async function resetDatabase() {
   } catch (err) {
     console.error("Error resetting database:", err);
   } finally {
-    process.exit(); // Closes the script
+    process.exit(); // Closes  the script
   }
 }
 
