@@ -4,7 +4,7 @@ async function resetDatabase() {
   try {
     console.log("Wiping database and resetting IDs...");
     
-    // TRUNCATE empties the tables.
+    // TRUNCATE empties the tables.It empties the table.
     // RESTART IDENTITY resets the SERIAL ID counters back to 1.
     // CASCADE ensures linked data in other tables is also cleared safely.
     await db.query('TRUNCATE TABLE users, venues, courts, bookings RESTART IDENTITY CASCADE;');
